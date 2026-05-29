@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Backyard Block Records — Trondheim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/outfit@5/index.css"/>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --black:   #060606;
+      --b2:      #0F0F0F;
+      --b3:      #1A1A1A;
+      --b4:      #252525;
+      --grey:    #333;
+      --muted:   #777;
+      --muted-2: #555;
+      --gold:    #F5A623;
+      --gold-dk: #C4831A;
+      --gold-lt: #FFD166;
+      --green:   #00E87A;
+      --white:   #FFFFFF;
+      --off:     #E8E8E8;
+      --dim:     rgba(255,255,255,.55);
+    }
+    html { scroll-behavior:smooth; }
+    body {
+      background:var(--black);
+      color:var(--white);
+      font-family:'Manrope',sans-serif;
+      overflow-x:hidden;
+      cursor:none;
+    }
+    ::-webkit-scrollbar { width:3px; }
+    ::-webkit-scrollbar-track { background:var(--b2); }
+    ::-webkit-scrollbar-thumb { background:var(--gold); }
+
+    /* ─── CURSOR ─── */
+    #cur { position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:exclusion; }
+    #cur-ring { position:fixed;width:36px;height:36px;border:1px solid rgba(245,166,35,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease,width .25s,height .25s; }
+    body.cg #cur { width:60px;height:60px; }
+    body.cg #cur-ring { width:80px;height:80px; }
+
+    /* ─── REVEAL ─── */
+    .reveal { opacity:0;transform:translateY(48px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1); }
+    .reveal.on { opacity:1;transform:translateY(0); }
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+    .reveal-l { opacity:0;transform:translateX(-56px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1); }
+    .reveal-l.on { opacity:1;transform:translateX(0); }
+    .reveal-r { opacity:0;transform:translateX(56px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1); }
+    .reveal-r.on { opacity:1;transform:translateX(0); }
+
+    /* ─── NAV ─── */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:0 56px;height:72px;
+      display:flex;align-items:center;justify-content:space-between;
+      transition:background .35s,border-bottom .35s;
+    }
+    nav.scrolled { background:rgba(6,6,6,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06); }
+    .nav-logo { display:flex;align-items:center;gap:12px;text-decoration:none;cursor:none; }
+    .nav-logo-vinyl {
+      width:34px;height:34px;border-radius:50%;
+      background:radial-gradient(circle,#2a2a2a 0%,#111 35%,#2a2a2a 36%,#111 55%,#2a2a2a 56%,#111 100%);
+      position:relative;animation:vspin 6s linear infinite;flex-shrink:0;
+    }
+    .nav-logo-vinyl::after {
+      content:'';position:absolute;width:9px;height:9px;border-radius:50%;
+      background:var(--gold);top:50%;left:50%;transform:translate(-50%,-50%);
+    }
+    @keyframes vspin { to { transform:rotate(360deg); } }
+    .nav-logo-text { font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--white); }
+    .nav-logo-text span { color:var(--gold); }
+
+    .nav-links { display:flex;align-items:center;gap:32px;list-style:none; }
+    .nav-links a { font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s; }
+    .nav-links a:hover { color:var(--white); }
+
+    .nav-cta {
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(245,166,35,.4);color:var(--gold);
+      font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;padding:10px 22px;
+      text-decoration:none;cursor:none;
+      transition:background .2s,border-color .2s,color .2s;
+    }
+    .nav-cta:hover { background:var(--gold);color:var(--black);border-color:var(--gold); }
+
+    .burger { display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:8px; }
+    .burger span { display:block;width:22px;height:1.5px;background:var(--white);transition:all .3s; }
+
+    .mob-nav { display:none;position:fixed;inset:0;background:var(--b2);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:28px; }
+    .mob-nav.open { display:flex; }
+    .mob-nav a { font-family:'Syne',sans-serif;font-size:40px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--white);text-decoration:none;cursor:none;transition:color .2s; }
+    .mob-nav a:hover { color:var(--gold); }
+
+    /* ─── HERO ─── */
+    #hero { position:relative;height:100vh;min-height:700px;overflow:hidden;display:flex;align-items:center; }
+    #particles-canvas { position:absolute;inset:0;z-index:0;opacity:.5; }
+    #wave-canvas { position:absolute;bottom:0;left:0;right:0;height:180px;z-index:1; }
+
+    .hero-inner {
+      position:relative;z-index:2;
+      max-width:1400px;margin:0 auto;width:100%;
+      padding:0 56px;
+      display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+    }
+    .hero-left {}
+    .hero-label {
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+      color:var(--muted);margin-bottom:28px;
+      opacity:0;transform:translateY(12px);
+      transition:opacity .6s .2s,transform .6s .2s;
+    }
+    #hero.on .hero-label { opacity:1;transform:translateY(0); }
+    .label-dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:ldot 1.5s ease infinite; }
+    @keyframes ldot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)} }
+
+    .hero-title {
+      font-family:'Syne',sans-serif;font-weight:800;
+      font-size:clamp(52px,7vw,96px);
+      line-height:.95;letter-spacing:-2px;
+      text-transform:uppercase;margin-bottom:28px;
+    }
+    .hero-title .line { display:block;overflow:hidden; }
+    .hero-title .line span { display:block;transform:translateY(110%);transition:transform .9s cubic-bezier(.16,1,.3,1); }
+    #hero.on .hero-title .line:nth-child(1) span { transform:translateY(0);transition-delay:.35s; }
+    #hero.on .hero-title .line:nth-child(2) span { transform:translateY(0);transition-delay:.5s; }
+    #hero.on .hero-title .line:nth-child(3) span { transform:translateY(0);transition-delay:.65s; }
+    .hero-title .gold { color:var(--gold); }
+    .hero-title .outline {
+      -webkit-text-stroke:1.5px rgba(255,255,255,.3);
+      color:transparent;
+    }
+
+    .hero-sub {
+      font-size:16px;color:var(--dim);line-height:1.8;max-width:440px;margin-bottom:40px;
+      opacity:0;transform:translateY(14px);transition:opacity .7s .88s,transform .7s .88s;
+    }
+    #hero.on .hero-sub { opacity:1;transform:translateY(0); }
+
+    .hero-ctas {
+      display:flex;gap:16px;flex-wrap:wrap;
+      opacity:0;transform:translateY(14px);transition:opacity .7s 1.05s,transform .7s 1.05s;
+    }
+    #hero.on .hero-ctas { opacity:1;transform:translateY(0); }
+
+    .btn-gold {
+      display:inline-flex;align-items:center;gap:9px;
+      background:var(--gold);color:var(--black);
+      font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+      letter-spacing:1.5px;text-transform:uppercase;
+      padding:15px 32px;text-decoration:none;cursor:none;
+      transition:background .2s,transform .2s;
+    }
+    .btn-gold:hover { background:var(--gold-lt);transform:translateY(-2px); }
+    .btn-gold svg { width:16px;height:16px; }
+
+    .btn-ghost-gold {
+      display:inline-flex;align-items:center;gap:9px;
+      border:1px solid rgba(245,166,35,.35);color:var(--gold);
+      font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+      letter-spacing:1.5px;text-transform:uppercase;
+      padding:15px 32px;text-decoration:none;cursor:none;
+      transition:border-color .2s,background .2s,transform .2s;
+    }
+    .btn-ghost-gold:hover { border-color:var(--gold);background:rgba(245,166,35,.08);transform:translateY(-2px); }
+
+    /* Vinyl record right */
+    .hero-right {
+      display:flex;align-items:center;justify-content:center;
+      position:relative;
+      opacity:0;transform:scale(.85);
+      transition:opacity .9s .6s,transform .9s .6s cubic-bezier(.16,1,.3,1);
+    }
+    #hero.on .hero-right { opacity:1;transform:scale(1); }
+
+    .vinyl-wrap { position:relative;width:380px;height:380px; }
+    .vinyl-disc {
+      width:380px;height:380px;border-radius:50%;
+      background:
+        radial-gradient(circle at 50% 50%,
+          #2a2a2a 0%,
+          #111 30%,
+          #2a2a2a 31%,
+          #111 38%,
+          #2a2a2a 39%,
+          #111 50%,
+          #2a2a2a 51%,
+          #111 60%,
+          #2a2a2a 61%,
+          #111 100%
+        );
+      animation:fullspin 8s linear infinite;
+      box-shadow:0 0 80px rgba(245,166,35,.15),0 0 160px rgba(245,166,35,.05);
+      position:relative;
+    }
+    @keyframes fullspin { to { transform:rotate(360deg); } }
+    .vinyl-label {
+      position:absolute;width:120px;height:120px;border-radius:50%;
+      background:linear-gradient(135deg,var(--gold) 0%,var(--gold-dk) 100%);
+      top:50%;left:50%;transform:translate(-50%,-50%);
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+      z-index:2;box-shadow:0 0 30px rgba(245,166,35,.4);
+    }
+    .vinyl-label-text { font-family:'Syne',sans-serif;font-weight:800;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--black);text-align:center;line-height:1.4; }
+    .vinyl-label-hole { width:10px;height:10px;border-radius:50%;background:var(--black);margin-top:4px; }
+    .vinyl-glow { position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.08) 0%,transparent 70%);animation:glowpulse 3s ease infinite; }
+    @keyframes glowpulse { 0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)} }
+
+    /* Rotating text ring around vinyl */
+    .vinyl-ring-text {
+      position:absolute;width:460px;height:460px;border-radius:50%;
+      top:50%;left:50%;transform:translate(-50%,-50%);
+      animation:fullspin 20s linear infinite;
+    }
+    .vinyl-ring-text svg { width:100%;height:100%; }
+
+    /* Scroll indicator */
+    .scroll-ind {
+      position:absolute;bottom:100px;right:56px;z-index:3;
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      opacity:0;transition:opacity .6s 1.6s;
+    }
+    #hero.on .scroll-ind { opacity:1; }
+    .scroll-ind span { font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl; }
+    .s-ln { width:1px;height:52px;background:var(--grey);overflow:hidden;position:relative; }
+    .s-ln::after { content:'';position:absolute;top:0;left:0;width:100%;height:40%;background:var(--gold);animation:sdown 1.8s ease infinite; }
+    @keyframes sdown { 0%{top:-40%}100%{top:140%} }
+
+    /* ─── MARQUEE ─── */
+    .mq-band { background:var(--gold);padding:14px 0;overflow:hidden; }
+    .mq-track { display:flex;width:max-content;animation:mq 22s linear infinite; }
+    .mq-track:hover { animation-play-state:paused; }
+    @keyframes mq { 0%{transform:translateX(0)}100%{transform:translateX(-50%)} }
+    .mq-item { display:flex;align-items:center;gap:20px;padding:0 24px;white-space:nowrap; }
+    .mq-item span { font-family:'Syne',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--black); }
+    .mq-dot { width:5px;height:5px;border-radius:50%;background:rgba(0,0,0,.3);flex-shrink:0; }
+
+    /* ─── SECTION SHARED ─── */
+    .section-num { font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px; }
+    .section-num::before { content:'';display:block;width:24px;height:1px;background:var(--muted); }
+    .section-title { font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,60px);letter-spacing:-1.5px;line-height:1.05;text-transform:uppercase; }
+    .section-title .gold { color:var(--gold); }
+    .section-sub { font-size:16px;color:var(--dim);line-height:1.85;max-width:520px; }
+
+    /* ─── ABOUT ─── */
+    #about { padding:120px 56px;background:var(--b2); }
+    .about-inner { max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center; }
+    .about-left {}
+    .about-text { font-size:17px;color:var(--dim);line-height:2;margin:28px 0 40px;max-width:500px; }
+    .about-stats { display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--b4); }
+    .astat { padding:28px;border-right:1px solid var(--b4);border-bottom:1px solid var(--b4); }
+    .astat:nth-child(2) { border-right:none; }
+    .astat:nth-child(3) { border-bottom:none; }
+    .astat:nth-child(4) { border-right:none;border-bottom:none; }
+    .astat-num { font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:var(--gold);line-height:1; }
+    .astat-lbl { font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:.5px; }
+
+    .about-right { position:relative; }
+    .about-img-wrap { border-radius:0;overflow:hidden;position:relative; }
+    .about-img-wrap img { width:100%;height:500px;object-fit:cover;filter:grayscale(20%)contrast(1.1); }
+    .about-img-overlay { position:absolute;inset:0;background:linear-gradient(to right,var(--b2) 0%,transparent 40%,transparent 60%,rgba(6,6,6,.5) 100%); }
+    /* gold corner accent */
+    .about-corner { position:absolute;top:-12px;right:-12px;width:80px;height:80px;border-top:3px solid var(--gold);border-right:3px solid var(--gold); }
+    .about-corner-bl { position:absolute;bottom:-12px;left:-12px;width:60px;height:60px;border-bottom:3px solid rgba(245,166,35,.3);border-left:3px solid rgba(245,166,35,.3); }
+
+    /* ─── SERVICES ─── */
+    #services { padding:120px 56px;background:var(--black); }
+    .services-inner { max-width:1400px;margin:0 auto; }
+    .services-header { display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:72px;gap:40px; }
+    .services-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:2px; }
+    .svc-card {
+      background:var(--b2);padding:52px 48px;
+      transition:background .3s;
+      perspective:1000px;cursor:none;position:relative;overflow:hidden;
+    }
+    .svc-card::before {
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:var(--gold);transform:scaleX(0);transform-origin:left;
+      transition:transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .svc-card:hover { background:var(--b3); }
+    .svc-card:hover::before { transform:scaleX(1); }
+    .svc-num { font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:rgba(245,166,35,.1);line-height:1;margin-bottom:-8px; }
+    .svc-icon { width:52px;height:52px;background:rgba(245,166,35,.1);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:background .3s; }
+    .svc-card:hover .svc-icon { background:var(--gold); }
+    .svc-icon svg { width:24px;height:24px;color:var(--gold);transition:color .3s; }
+    .svc-card:hover .svc-icon svg { color:var(--black); }
+    .svc-title { font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.5px;text-transform:uppercase;margin-bottom:14px; }
+    .svc-desc { font-size:14px;color:var(--muted);line-height:1.85; }
+
+    /* ─── RELEASES ─── */
+    #releases { padding:120px 0;background:var(--b2);overflow:hidden; }
+    .releases-header { max-width:1400px;margin:0 auto;padding:0 56px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:56px; }
+    .drag-hint { display:flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted); }
+    .drag-hint svg { width:18px;height:18px;color:var(--gold); }
+
+    .releases-strip { display:flex;gap:2px;padding:0 56px;overflow-x:auto;cursor:grab;scrollbar-width:none;perspective:800px; }
+    .releases-strip:active { cursor:grabbing; }
+    .releases-strip::-webkit-scrollbar { display:none; }
+
+    .rel-card {
+      flex-shrink:0;width:clamp(240px,22vw,320px);
+      background:var(--b3);cursor:none;
+      transition:transform .15s ease,box-shadow .15s ease;
+      transform-style:preserve-3d;
+      position:relative;overflow:hidden;
+    }
+    .rel-card-img { width:100%;height:280px;overflow:hidden;position:relative; }
+    .rel-card-img img { width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.46,.45,.94);pointer-events:none;filter:grayscale(30%)contrast(1.1); }
+    .rel-card:hover .rel-card-img img { transform:scale(1.08);filter:grayscale(0%)contrast(1); }
+    .rel-card-overlay { position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,transparent 50%); }
+    .rel-cat { position:absolute;top:12px;left:12px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--black);padding:4px 10px; }
+    .rel-body { padding:20px; }
+    .rel-title { font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.3px;text-transform:uppercase;margin-bottom:4px; }
+    .rel-artist { font-size:12px;color:var(--muted);letter-spacing:1px; }
+
+    /* ─── PROCESS ─── */
+    #process { padding:120px 56px;background:var(--black); }
+    .process-inner { max-width:1400px;margin:0 auto; }
+    .process-header { text-align:center;margin-bottom:80px; }
+    .process-steps { display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative; }
+    .process-steps::before { content:'';position:absolute;top:28px;left:12%;right:12%;height:1px;background:linear-gradient(90deg,var(--gold),rgba(245,166,35,.2)); }
+    .proc-step { padding:0 24px;text-align:center; }
+    .proc-num-wrap { width:56px;height:56px;border:1px solid var(--b4);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;z-index:1;background:var(--black);transition:border-color .3s,background .3s; }
+    .proc-step:hover .proc-num-wrap { border-color:var(--gold);background:var(--gold); }
+    .proc-num { font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--muted);transition:color .3s; }
+    .proc-step:hover .proc-num { color:var(--black); }
+    .proc-title { font-family:'Syne',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px; }
+    .proc-desc { font-size:13px;color:var(--muted);line-height:1.75; }
+
+    /* ─── CONTACT ─── */
+    #kontakt { padding:120px 56px;background:var(--b2); }
+    .kontakt-inner { max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start; }
+    .kontakt-left .section-title { margin-bottom:20px; }
+    .kontakt-left .section-sub { margin-bottom:48px; }
+    .k-details { display:flex;flex-direction:column;gap:20px; }
+    .k-row { display:flex;align-items:flex-start;gap:14px; }
+    .k-icon { width:40px;height:40px;border:1px solid var(--b4);display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+    .k-icon svg { width:16px;height:16px;color:var(--gold); }
+    .k-lbl { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);margin-bottom:4px; }
+    .k-val { font-size:14px;color:var(--off); }
+
+    /* Contact form */
+    .k-form { border:1px solid var(--b4);padding:40px; }
+    .k-form h3 { font-family:'Syne',sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:-0.3px;margin-bottom:28px; }
+    .kf-row { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+    .kf-g { margin-bottom:14px; }
+    .kf-g label { display:block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px; }
+    .kf-g input, .kf-g select, .kf-g textarea {
+      width:100%;background:var(--b3);border:1px solid var(--b4);
+      color:var(--white);font-family:'Manrope',sans-serif;font-size:14px;
+      padding:12px 14px;outline:none;transition:border-color .2s;
+    }
+    .kf-g input:focus,.kf-g select:focus,.kf-g textarea:focus { border-color:var(--gold); }
+    .kf-g input::placeholder,.kf-g textarea::placeholder { color:var(--muted-2); }
+    .kf-g textarea { resize:none;min-height:100px; }
+    .kf-g select { cursor:none;appearance:none; }
+    .kf-g select option { background:var(--b3); }
+    .kf-submit {
+      width:100%;background:var(--gold);color:var(--black);
+      font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+      letter-spacing:2px;text-transform:uppercase;
+      padding:16px;border:none;cursor:none;
+      display:flex;align-items:center;justify-content:center;gap:9px;
+      transition:background .2s,transform .2s;margin-top:4px;
+    }
+    .kf-submit:hover { background:var(--gold-lt);transform:translateY(-2px); }
+    .kf-submit:disabled { opacity:.6;transform:none; }
+    .kf-success { display:none;background:rgba(0,232,122,.08);border:1px solid rgba(0,232,122,.2);color:var(--green);font-size:13px;padding:14px;text-align:center;margin-top:12px; }
+
+    /* ─── FOOTER ─── */
+    footer { background:var(--black);border-top:1px solid var(--b4);padding:60px 56px 36px; }
+    .footer-top { max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px; }
+    .f-brand p { font-size:14px;color:var(--muted);line-height:1.8;margin:14px 0;max-width:280px; }
+    .f-col h5 { font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--white);margin-bottom:20px; }
+    .f-col ul { list-style:none;display:flex;flex-direction:column;gap:10px; }
+    .f-col ul a { font-size:14px;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s; }
+    .f-col ul a:hover { color:var(--gold); }
+    .footer-bottom { max-width:1400px;margin:0 auto;border-top:1px solid var(--b4);padding-top:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap; }
+    .footer-bottom p { font-size:12px;color:var(--muted-2); }
+    .f-links { display:flex;gap:22px; }
+    .f-links a { font-size:11px;color:var(--muted-2);text-decoration:none;cursor:none;transition:color .2s; }
+    .f-links a:hover { color:var(--muted); }
+    .yams-credit { max-width:1400px;margin:20px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:center; }
+
+    /* Back to top */
+    #btt { position:fixed;bottom:24px;right:24px;z-index:90;width:44px;height:44px;background:var(--gold);display:flex;align-items:center;justify-content:center;cursor:none;opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s,background .2s;border:none; }
+    #btt.on { opacity:1;transform:translateY(0); }
+    #btt:hover { background:var(--gold-lt); }
+    #btt svg { width:18px;height:18px;color:var(--black); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width:1100px) {
+      .about-inner,.kontakt-inner { grid-template-columns:1fr;gap:56px; }
+      .about-right { display:none; }
+      .hero-inner { grid-template-columns:1fr; }
+      .hero-right { display:none; }
+      .services-grid { grid-template-columns:1fr; }
+      .process-steps { grid-template-columns:1fr 1fr;gap:40px; }
+      .process-steps::before { display:none; }
+      .footer-top { grid-template-columns:1fr 1fr;gap:40px; }
+    }
+    @media (max-width:768px) {
+      nav { padding:0 20px; }
+      .nav-links,.nav-cta { display:none; }
+      .burger { display:flex; }
+      #hero { padding:0; }
+      .hero-inner { padding:0 20px; }
+      .scroll-ind { display:none; }
+      #about,#services,#process,#kontakt,footer { padding:64px 20px; }
+      #releases { padding:64px 0; }
+      .releases-header { padding:0 20px; }
+      .releases-strip { padding:0 20px; }
+      .process-steps { grid-template-columns:1fr; }
+      .kf-row { grid-template-columns:1fr; }
+      .footer-top { grid-template-columns:1fr;gap:32px; }
+      .footer-bottom { flex-direction:column;text-align:center; }
+      body { cursor:auto; }
+      #cur,#cur-ring { display:none; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important;transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+  <button id="btt" aria-label="Til toppen"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg></button>
+
+  <!-- ── NAV ── -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-vinyl"></div>
+      <span class="nav-logo-text">Backyard <span>Block</span> Records</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">Om oss</a></li>
+      <li><a href="#services">Tjenester</a></li>
+      <li><a href="#releases">Utgivelser</a></li>
+      <li><a href="#process">Prosessen</a></li>
+    </ul>
+    <a href="#kontakt" class="nav-cta magnetic">Kontakt oss</a>
+    <button class="burger" id="burger"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mob-nav" id="mob-nav">
+    <a href="#about" class="mob-l">Om oss</a>
+    <a href="#services" class="mob-l">Tjenester</a>
+    <a href="#releases" class="mob-l">Utgivelser</a>
+    <a href="#kontakt" class="mob-l">Kontakt</a>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <canvas id="particles-canvas"></canvas>
+    <canvas id="wave-canvas"></canvas>
+
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-label">
+          <div class="label-dot"></div>
+          Trondheim, Norge — Est. 2025
+        </div>
+        <h1 class="hero-title">
+          <span class="line"><span>Backyard</span></span>
+          <span class="line"><span><span class="gold">Block</span></span></span>
+          <span class="line"><span><span class="outline">Records</span></span></span>
+        </h1>
+        <p class="hero-sub">Et norsk plateselskap med hjertet i Trondheim. Vi spiller inn, utgir, lisenserer og promoterer musikk — fra backstage til verdensscenen.</p>
+        <div class="hero-ctas">
+          <a href="#kontakt" class="btn-gold magnetic">
+            Kom i kontakt
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <a href="#services" class="btn-ghost-gold">Se hva vi gjør</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="vinyl-wrap">
+          <div class="vinyl-glow"></div>
+          <div class="vinyl-disc">
+            <div class="vinyl-label">
+              <div class="vinyl-label-text">BACKYARD<br/>BLOCK</div>
+              <div class="vinyl-label-hole"></div>
+            </div>
+          </div>
+          <!-- Rotating text ring -->
+          <div class="vinyl-ring-text">
+            <svg viewBox="0 0 460 460" fill="none">
+              <path id="ring-path" d="M230,230 m-210,0 a210,210 0 1,1 420,0 a210,210 0 1,1 -420,0" fill="none"/>
+              <text fill="rgba(245,166,35,0.4)" font-family="Syne,sans-serif" font-size="11" font-weight="700" letter-spacing="8">
+                <textPath href="#ring-path">
+                  RECORDING · RELEASING · LICENSING · PROMOTING · TRONDHEIM · BACKYARD BLOCK RECORDS ·&nbsp;
+                </textPath>
+              </text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-ind">
+      <div class="s-ln"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── MARQUEE ── -->
+  <div class="mq-band">
+    <div class="mq-track">
+      <div class="mq-item"><span>Innspilling</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Utgivelse</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Lisensiering</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Promotering</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Musikkforlag</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Trondheim</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Innspilling</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Utgivelse</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Lisensiering</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Promotering</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Musikkforlag</span><div class="mq-dot"></div></div>
+      <div class="mq-item"><span>Trondheim</span><div class="mq-dot"></div></div>
+    </div>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-left">
+        <div class="section-num reveal">01 / Om oss</div>
+        <h2 class="section-title reveal d1">Fra <span class="gold">Trondheim</span><br/>til verden.</h2>
+        <p class="about-text reveal d2">Backyard Block Records AS ble stiftet i desember 2025, med kontor i Vilhelm Storms gate 4 i Trondheim. Vi er et norsk aksjeselskap dedikert til å bygge karrierer og løfte musikk fra den norske scenen ut i verden.</p>
+        <p class="about-text reveal d3" style="margin-top:-20px">Vår filosofi er enkel: musikk lages best når artisten har frihet, støtte og de riktige folkene rundt seg. Det er det vi er her for.</p>
+        <div class="about-stats reveal d4">
+          <div class="astat">
+            <div class="astat-num" data-target="2025">—</div>
+            <div class="astat-lbl">Stiftet</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num" data-target="4">—</div>
+            <div class="astat-lbl">Kjernetjenester</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">TRD</div>
+            <div class="astat-lbl">Hjemby — Trondheim</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">AS</div>
+            <div class="astat-lbl">Norsk aksjeselskap</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-right">
+        <div class="about-corner"></div>
+        <div class="about-corner-bl"></div>
+        <div class="about-img-wrap img-wipe">
+          <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=900&q=85" alt="Recording studio" loading="lazy"/>
+          <div class="about-img-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ── -->
+  <section id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <div>
+          <div class="section-num reveal">02 / Tjenester</div>
+          <h2 class="section-title reveal d1">Hva vi <span class="gold">gjør.</span></h2>
+        </div>
+        <p class="section-sub reveal d2" style="max-width:340px;text-align:right">Fullservice plateselskap — fra studio til strømmeplattform.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="svc-card tilt-card reveal">
+          <div class="svc-num">01</div>
+          <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg></div>
+          <div class="svc-title scramble-hover">Innspilling</div>
+          <div class="svc-desc">Vi produserer og spiller inn musikk av høyeste kvalitet — i samarbeid med Trondheims beste studioteknikere og produsenter. Lyden din fortjener det beste.</div>
+        </div>
+
+        <div class="svc-card tilt-card reveal d1">
+          <div class="svc-num">02</div>
+          <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg></div>
+          <div class="svc-title scramble-hover">Utgivelse</div>
+          <div class="svc-desc">Distribusjon til alle store strømmeplattformer, fysisk utgivelse og strategisk release-planlegging for maksimal gjennomslagskraft på riktig tidspunkt.</div>
+        </div>
+
+        <div class="svc-card tilt-card reveal d2">
+          <div class="svc-num">03</div>
+          <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+          <div class="svc-title scramble-hover">Lisensiering</div>
+          <div class="svc-desc">Vi håndterer sync-lisensiering til film, TV, reklame og spill — og sørger for at artistenes musikk når nye publikum og genererer nye inntektsstrømmer.</div>
+        </div>
+
+        <div class="svc-card tilt-card reveal d3">
+          <div class="svc-num">04</div>
+          <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg></div>
+          <div class="svc-title scramble-hover">Musikkforlag</div>
+          <div class="svc-desc">Full musikkforlagsvirksomhet — vi beskytter og forvalter artistens rettigheter, søker om TONO-registrering og maksimerer rettighetsinntekter globalt.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RELEASES ── -->
+  <section id="releases">
+    <div class="releases-header">
+      <div>
+        <div class="section-num reveal">03 / Katalog</div>
+        <h2 class="section-title reveal d1">Utgivelser &amp;<br/><span class="gold">Artister.</span></h2>
+      </div>
+      <div class="drag-hint reveal d2">
+        <span>Dra for å bla</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </div>
+    </div>
+    <div class="releases-strip" id="relstrip">
+
+      <div class="rel-card tilt-card">
+        <div class="rel-card-img">
+          <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&q=80" alt="Artist" loading="lazy"/>
+          <div class="rel-card-overlay"></div>
+          <div class="rel-cat">Hip-Hop</div>
+        </div>
+        <div class="rel-body">
+          <div class="rel-title">Kommende utgivelse</div>
+          <div class="rel-artist">Artist — 2026</div>
+        </div>
+      </div>
+
+      <div class="rel-card tilt-card">
+        <div class="rel-card-img">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80" alt="Studio" loading="lazy"/>
+          <div class="rel-card-overlay"></div>
+          <div class="rel-cat">Pop</div>
+        </div>
+        <div class="rel-body">
+          <div class="rel-title">Studio Sessions</div>
+          <div class="rel-artist">Trondheim — 2026</div>
+        </div>
+      </div>
+
+      <div class="rel-card tilt-card">
+        <div class="rel-card-img">
+          <img src="https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=500&q=80" alt="Live" loading="lazy"/>
+          <div class="rel-card-overlay"></div>
+          <div class="rel-cat">Electronic</div>
+        </div>
+        <div class="rel-body">
+          <div class="rel-title">Under utvikling</div>
+          <div class="rel-artist">BBR Artists — 2026</div>
+        </div>
+      </div>
+
+      <div class="rel-card tilt-card">
+        <div class="rel-card-img">
+          <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=500&q=80" alt="Recording" loading="lazy"/>
+          <div class="rel-card-overlay"></div>
+          <div class="rel-cat">R&amp;B</div>
+        </div>
+        <div class="rel-body">
+          <div class="rel-title">Backyard Collective</div>
+          <div class="rel-artist">Diverse artister — 2026</div>
+        </div>
+      </div>
+
+      <div class="rel-card tilt-card">
+        <div class="rel-card-img">
+          <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&q=80" alt="Performance" loading="lazy"/>
+          <div class="rel-card-overlay"></div>
+          <div class="rel-cat">Live</div>
+        </div>
+        <div class="rel-body">
+          <div class="rel-title">Live Recordings</div>
+          <div class="rel-artist">Trondheim — 2026</div>
+        </div>
+      </div>
+
+      <!-- CTA card -->
+      <div class="rel-card tilt-card" style="background:var(--gold);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;min-height:340px;padding:32px">
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:-0.5px;color:var(--black);text-align:center">Er du neste<br/>artist?</div>
+        <a href="#kontakt" style="background:var(--black);color:var(--gold);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 22px;text-decoration:none;cursor:none;transition:background .2s">Ta kontakt →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PROCESS ── -->
+  <section id="process">
+    <div class="process-inner">
+      <div class="process-header">
+        <div class="section-num reveal" style="justify-content:center">04 / Prosessen</div>
+        <h2 class="section-title reveal d1" style="margin-bottom:10px">Fra idé til <span class="gold">utgivelse.</span></h2>
+        <p class="section-sub reveal d2" style="margin:0 auto;text-align:center">Vi tar deg gjennom hele løpet — steg for steg.</p>
+      </div>
+      <div class="process-steps">
+        <div class="proc-step reveal">
+          <div class="proc-num-wrap"><span class="proc-num">01</span></div>
+          <div class="proc-title">Første møte</div>
+          <p class="proc-desc">Vi lærer deg å kjenne — musikken din, ambisjonene dine og hva du trenger av oss for å lykkes.</p>
+        </div>
+        <div class="proc-step reveal d1">
+          <div class="proc-num-wrap"><span class="proc-num">02</span></div>
+          <div class="proc-title">Innspilling</div>
+          <p class="proc-desc">Produksjon og innspilling i samarbeid med vårt nettverk av produsenter og lydteknikere i Trondheim.</p>
+        </div>
+        <div class="proc-step reveal d2">
+          <div class="proc-num-wrap"><span class="proc-num">03</span></div>
+          <div class="proc-title">Rettigheter</div>
+          <p class="proc-desc">Vi håndterer alle rettigheter, TONO-registrering og lisensiering — du fokuserer på musikken.</p>
+        </div>
+        <div class="proc-step reveal d3">
+          <div class="proc-num-wrap"><span class="proc-num">04</span></div>
+          <div class="proc-title">Utgivelse</div>
+          <p class="proc-desc">Strategisk release til alle plattformer, med promotering og PR for å nå bredest mulig publikum.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="kontakt">
+    <div class="kontakt-inner">
+      <div class="kontakt-left">
+        <div class="section-num reveal">05 / Kontakt</div>
+        <h2 class="section-title reveal d1" style="margin-bottom:16px">La oss lage<br/><span class="gold">noe stort.</span></h2>
+        <p class="section-sub reveal d2">Enten du er artist, produsent eller samarbeidspartner — vi vil gjerne høre fra deg.</p>
+        <div class="k-details">
+          <div class="k-row reveal d2">
+            <div class="k-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+            <div><div class="k-lbl">Adresse</div><div class="k-val">Vilhelm Storms gate 4<br/>Trondheim, Norge</div></div>
+          </div>
+          <div class="k-row reveal d3">
+            <div class="k-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+            <div><div class="k-lbl">E-post</div><div class="k-val">post@backyardblockrecords.no</div></div>
+          </div>
+          <div class="k-row reveal d4">
+            <div class="k-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg></div>
+            <div><div class="k-lbl">Org.nr</div><div class="k-val">Backyard Block Records AS</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="k-form reveal d2">
+        <h3>Send en melding</h3>
+        <form id="kform" novalidate>
+          <div class="kf-row">
+            <div class="kf-g"><label>Navn *</label><input type="text" required placeholder="Ditt navn"/></div>
+            <div class="kf-g"><label>E-post *</label><input type="email" required placeholder="din@epost.no"/></div>
+          </div>
+          <div class="kf-g">
+            <label>Hva gjelder det?</label>
+            <select>
+              <option value="">Velg alternativ...</option>
+              <option>Jeg er artist / søker platekontrakt</option>
+              <option>Lisensiering / sync</option>
+              <option>Samarbeid / partnerskap</option>
+              <option>Presse / media</option>
+              <option>Annet</option>
+            </select>
+          </div>
+          <div class="kf-g"><label>Melding</label><textarea placeholder="Fortell oss om deg og hva du ønsker å oppnå..."></textarea></div>
+          <button type="submit" class="kf-submit magnetic" id="kfsub">
+            <svg style="width:16px;height:16px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            Send melding
+          </button>
+          <div class="kf-success" id="kfsuccess">Takk! Vi tar kontakt snarest.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-top">
+      <div class="f-brand">
+        <a href="#hero" class="nav-logo">
+          <div class="nav-logo-vinyl" style="animation-duration:4s"></div>
+          <span class="nav-logo-text">Backyard <span>Block</span> Records</span>
+        </a>
+        <p>Norsk plateselskap stiftet desember 2025. Innspilling, utgivelse, lisensiering og promotering av musikk — fra Trondheim til verden.</p>
+        <p style="font-size:12px;color:rgba(255,255,255,.2);margin-top:4px">Vilhelm Storms gate 4, Trondheim</p>
+      </div>
+      <div class="f-col">
+        <h5>Tjenester</h5>
+        <ul>
+          <li><a href="#services">Innspilling</a></li>
+          <li><a href="#services">Utgivelse</a></li>
+          <li><a href="#services">Lisensiering</a></li>
+          <li><a href="#services">Musikkforlag</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Selskapet</h5>
+        <ul>
+          <li><a href="#about">Om oss</a></li>
+          <li><a href="#releases">Utgivelser</a></li>
+          <li><a href="#process">Prosessen</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Backyard Block Records AS. Alle rettigheter forbeholdt.</p>
+      <div class="f-links">
+        <a href="#">Personvern</a>
+        <a href="#">Vilkår</a>
+      </div>
+    </div>
+    <!-- YAMS AS Primary Dark Logo -->
+    <div class="yams-credit">
+      <div style="display:inline-flex;align-items:center;gap:10px;background:#0B0B0B;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 22px;">
+        <svg width="18" height="24" viewBox="0 0 34 46" fill="none">
+          <line x1="2" y1="2" x2="17" y2="19" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="32" y1="2" x2="17" y2="19" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="17" y1="19" x2="17" y2="44" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="17" cy="19" r="4.5" fill="#C8A660"/>
+        </svg>
+        <div style="display:flex;align-items:baseline;gap:4px;line-height:1;">
+          <span style="font-family:'Outfit','Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.5px;color:#FFFFFF;">YAMS</span>
+          <span style="font-family:'Outfit','Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:300;color:rgba(255,255,255,.4);">AS</span>
+        </div>
+        <span style="width:1px;height:16px;background:rgba(255,255,255,.12);display:block;"></span>
+        <span style="font-family:'Outfit','Helvetica Neue',Arial,sans-serif;font-size:10px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.28);">Website Solutions</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // ─── Custom cursor ───
+  const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,button,.rel-card,.svc-card,.proc-step').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cg'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cg'));
+  });
+
+  // ─── Particles canvas ───
+  const pc=document.getElementById('particles-canvas');
+  const pctx=pc.getContext('2d');
+  let pw,ph,particles=[];
+  function resizePC(){pw=pc.width=window.innerWidth;ph=pc.height=window.innerHeight;}
+  resizePC();
+  window.addEventListener('resize',resizePC);
+
+  class Particle {
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*pw;
+      this.y=Math.random()*ph;
+      this.size=Math.random()*1.5+.3;
+      this.speedX=(Math.random()-.5)*.3;
+      this.speedY=(Math.random()-.5)*.3;
+      this.opacity=Math.random()*.4+.1;
+      this.color=Math.random()>.7?`rgba(245,166,35,${this.opacity})`:`rgba(255,255,255,${this.opacity*.5})`;
+    }
+    update(){
+      this.x+=this.speedX;this.y+=this.speedY;
+      if(this.x<0||this.x>pw||this.y<0||this.y>ph)this.reset();
+    }
+    draw(){
+      pctx.beginPath();
+      pctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      pctx.fillStyle=this.color;
+      pctx.fill();
+    }
+  }
+  for(let i=0;i<120;i++)particles.push(new Particle());
+
+  // Draw connections between close particles
+  function drawConnections(){
+    particles.forEach((a,i)=>{
+      particles.slice(i+1).forEach(b=>{
+        const dx=a.x-b.x,dy=a.y-b.y,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<80){
+          pctx.beginPath();
+          pctx.strokeStyle=`rgba(245,166,35,${.06*(1-dist/80)})`;
+          pctx.lineWidth=.5;
+          pctx.moveTo(a.x,a.y);
+          pctx.lineTo(b.x,b.y);
+          pctx.stroke();
+        }
+      });
+    });
+  }
+
+  function animParticles(){
+    pctx.clearRect(0,0,pw,ph);
+    drawConnections();
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(animParticles);
+  }
+  animParticles();
+
+  // ─── Waveform canvas ───
+  const wc=document.getElementById('wave-canvas');
+  const wctx=wc.getContext('2d');
+  let ww,wh;
+  function resizeWC(){ww=wc.width=window.innerWidth;wh=wc.height=180;}
+  resizeWC();
+  window.addEventListener('resize',resizeWC);
+
+  function drawWave(){
+    wctx.clearRect(0,0,ww,wh);
+    const bars=Math.floor(ww/8);
+    const bw=ww/bars;
+    const t=Date.now()/1000;
+    for(let i=0;i<bars;i++){
+      const h=Math.abs(Math.sin(i*.18+t*1.8)*28+Math.sin(i*.07+t*.9)*18+Math.sin(i*.35+t*2.4)*10)+4;
+      const alpha=.15+h/80;
+      const grad=wctx.createLinearGradient(0,wh/2-h,0,wh/2+h);
+      grad.addColorStop(0,`rgba(245,166,35,${alpha})`);
+      grad.addColorStop(.5,`rgba(245,166,35,${alpha*1.5})`);
+      grad.addColorStop(1,`rgba(245,166,35,${alpha*.3})`);
+      wctx.fillStyle=grad;
+      wctx.fillRect(i*bw+1,wh/2-h,bw-2,h*2);
+    }
+    requestAnimationFrame(drawWave);
+  }
+  drawWave();
+
+  // ─── Nav scroll ───
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+  // ─── Hero load ───
+  const hero=document.getElementById('hero');
+  const go=()=>hero.classList.add('on');
+  window.addEventListener('load',go);setTimeout(go,100);
+
+  // ─── Mobile menu ───
+  const burger=document.getElementById('burger'),mob=document.getElementById('mob-nav');
+  let mo=false;
+  burger.addEventListener('click',()=>{
+    mo=!mo;mob.classList.toggle('open',mo);
+    const s=burger.querySelectorAll('span');
+    s[0].style.transform=mo?'rotate(45deg) translate(5px,5px)':'';
+    s[1].style.opacity=mo?'0':'1';
+    s[2].style.transform=mo?'rotate(-45deg) translate(5px,-5px)':'';
+  });
+  document.querySelectorAll('.mob-l').forEach(l=>l.addEventListener('click',()=>{mo=false;mob.classList.remove('open');burger.querySelectorAll('span').forEach(s=>{s.style.transform='';s.style.opacity='';});}));
+
+  // ─── Scroll reveal ───
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}});
+  },{threshold:.07,rootMargin:'0px 0px -32px 0px'});
+  document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>obs.observe(el));
+
+  // ─── 3D Card Tilt ───
+  document.querySelectorAll('.tilt-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(800px) rotateX(${y*-10}deg) rotateY(${x*10}deg) scale(1.02)`;
+      card.style.transition='transform .05s ease';
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='';
+      card.style.transition='transform .5s ease';
+    });
+  });
+
+  // ─── Magnetic buttons ───
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      const x=e.clientX-r.left-r.width/2;
+      const y=e.clientY-r.top-r.height/2;
+      btn.style.transform=`translate(${x*.25}px,${y*.25}px)`;
+    });
+    btn.addEventListener('mouseleave',()=>{ btn.style.transform=''; });
+  });
+
+  // ─── Text Scramble on section titles ───
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*';
+  document.querySelectorAll('.scramble-hover').forEach(el=>{
+    const original=el.textContent;
+    let interval;
+    el.addEventListener('mouseenter',()=>{
+      let iter=0;
+      clearInterval(interval);
+      interval=setInterval(()=>{
+        el.textContent=original.split('').map((c,i)=>{
+          if(i<iter)return original[i];
+          return chars[Math.floor(Math.random()*chars.length)];
+        }).join('');
+        if(iter>=original.length){clearInterval(interval);el.textContent=original;}
+        iter+=.5;
+      },30);
+    });
+  });
+
+  // ─── Drag scroll for releases ───
+  const rs=document.getElementById('relstrip');
+  let down=false,sx,sl;
+  rs.addEventListener('mousedown',e=>{down=true;sx=e.pageX-rs.offsetLeft;sl=rs.scrollLeft;rs.style.cursor='grabbing';});
+  rs.addEventListener('mouseleave',()=>{down=false;rs.style.cursor='grab';});
+  rs.addEventListener('mouseup',()=>{down=false;rs.style.cursor='grab';});
+  rs.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();rs.scrollLeft=sl-(e.pageX-rs.offsetLeft-sx)*1.4;});
+  let tx=0,tsl=0;
+  rs.addEventListener('touchstart',e=>{tx=e.touches[0].pageX;tsl=rs.scrollLeft;},{passive:true});
+  rs.addEventListener('touchmove',e=>{rs.scrollLeft=tsl+(tx-e.touches[0].pageX);},{passive:true});
+
+  // ─── Counter animation for stat that makes sense ───
+  const cObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const t=parseInt(e.target.dataset.target);
+        if(isNaN(t)){cObs.unobserve(e.target);return;}
+        let start=null;
+        const step=ts=>{
+          if(!start)start=ts;
+          const p=Math.min((ts-start)/1200,1);
+          const ease=1-Math.pow(1-p,4);
+          e.target.textContent=Math.round(ease*t);
+          if(p<1)requestAnimationFrame(step);
+          else e.target.textContent=t;
+        };
+        requestAnimationFrame(step);
+        cObs.unobserve(e.target);
+      }
+    });
+  },{threshold:.5});
+  document.querySelectorAll('[data-target]').forEach(el=>cObs.observe(el));
+
+  // ─── Back to top ───
+  const btt=document.getElementById('btt');
+  window.addEventListener('scroll',()=>btt.classList.toggle('on',scrollY>500),{passive:true});
+  btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // ─── Contact form ───
+  document.getElementById('kform').addEventListener('submit',e=>{
+    e.preventDefault();
+    if(!e.target.checkValidity()){e.target.reportValidity();return;}
+    const btn=document.getElementById('kfsub');
+    btn.disabled=true;btn.textContent='Sender...';
+    setTimeout(()=>{btn.style.display='none';document.getElementById('kfsuccess').style.display='block';e.target.reset();},1400);
+  });
+
+  // ─── Smooth anchor ───
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+    });
+  });
+  </script>
+</body>
+</html>
